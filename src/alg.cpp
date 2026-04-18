@@ -1,8 +1,10 @@
 // Copyright 2021 NNTU-CS
 #include "alg.h"
+
 #include <cctype>
 #include <sstream>
 #include <string>
+
 #include "tstack.h"
 
 int priority(char op) {
