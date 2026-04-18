@@ -1,9 +1,9 @@
 // Copyright 2025 NNTU-CS
 #include "alg.h"
+#include "tstack.h"
 #include <cctype>
 #include <sstream>
 #include <string>
-#include "tstack.h"
 
 int priority(char op) {
     if (op == '+' || op == '-') return 1;
@@ -29,16 +29,16 @@ std::string infx2pstfx(const std::string& inf) {
         } else if (ch == '(') {
             st.push(ch);
         } else if (ch == ')') {
-            while (!st.empty() && st.top() != '(') {
+            while (!st.isEmpty() && st.get() != '(') {
                 result += st.pop();
                 result += ' ';
             }
-            if (!st.empty() && st.top() == '(') {
+            if (!st.isEmpty() && st.get() == '(') {
                 st.pop();
             }
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            while (!st.empty() && st.top() != '(' &&
-                   priority(st.top()) >= priority(ch)) {
+            while (!st.isEmpty() && st.get() != '(' &&
+                   priority(st.get()) >= priority(ch)) {
                 result += st.pop();
                 result += ' ';
             }
@@ -47,7 +47,7 @@ std::string infx2pstfx(const std::string& inf) {
         ++i;
     }
 
-    while (!st.empty()) {
+    while (!st.isEmpty()) {
         result += st.pop();
         result += ' ';
     }
