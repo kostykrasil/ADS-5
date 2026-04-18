@@ -27,28 +27,28 @@ std::string infx2pstfx(const std::string& inf) {
             result += ' ';
             continue;
         } else if (ch == '(') {
-            st.push(ch);
+            st.Push(ch);
         } else if (ch == ')') {
-            while (!st.isEmpty() && st.get() != '(') {
-                result += st.pop();
+            while (!st.IsEmpty() && st.Top() != '(') {
+                result += st.Pop();
                 result += ' ';
             }
-            if (!st.isEmpty() && st.get() == '(') {
-                st.pop();
+            if (!st.IsEmpty() && st.Top() == '(') {
+                st.Pop();
             }
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            while (!st.isEmpty() && st.get() != '(' &&
-                   priority(st.get()) >= priority(ch)) {
-                result += st.pop();
+            while (!st.IsEmpty() && st.Top() != '(' &&
+                   priority(st.Top()) >= priority(ch)) {
+                result += st.Pop();
                 result += ' ';
             }
-            st.push(ch);
+            st.Push(ch);
         }
         ++i;
     }
 
-    while (!st.isEmpty()) {
-        result += st.pop();
+    while (!st.IsEmpty()) {
+        result += st.Pop();
         result += ' ';
     }
 
@@ -66,10 +66,10 @@ int eval(const std::string& post) {
 
     while (iss >> token) {
         if (isdigit(token[0]) || (token.size() > 1 && token[0] == '-')) {
-            st.push(std::stoi(token));
+            st.Push(std::stoi(token));
         } else {
-            int right = st.pop();
-            int left = st.pop();
+            int right = st.Pop();
+            int left = st.Pop();
             int res = 0;
             switch (token[0]) {
                 case '+': res = left + right; break;
@@ -78,8 +78,8 @@ int eval(const std::string& post) {
                 case '/': res = left / right; break;
                 default: break;
             }
-            st.push(res);
+            st.Push(res);
         }
     }
-    return st.pop();
+    return st.Pop();
 }
