@@ -2,17 +2,17 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+template<typename T, int STACK_SIZE>
 class TStack {
  private:
-  T data[size];
+  T data[STACK_SIZE];
   int topIndex;
 
  public:
   TStack() : topIndex(-1) {}
 
   void push(T value) {
-    if (topIndex < size - 1) {
+    if (topIndex < STACK_SIZE - 1) {
       data[++topIndex] = value;
     }
   }
