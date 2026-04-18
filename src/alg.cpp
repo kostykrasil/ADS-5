@@ -1,9 +1,11 @@
 // Copyright 2025 NNTU-CS
 #include "alg.h"
-#include "tstack.h"
+
 #include <cctype>
 #include <sstream>
 #include <string>
+
+#include "tstack.h"
 
 int priority(char op) {
     if (op == '+' || op == '-') return 1;
@@ -27,28 +29,28 @@ std::string infx2pstfx(const std::string& inf) {
             result += ' ';
             continue;
         } else if (ch == '(') {
-            st.Push(ch);
+            st.push(ch);
         } else if (ch == ')') {
-            while (!st.IsEmpty() && st.Top() != '(') {
-                result += st.Pop();
+            while (!st.isEmpty() && st.top() != '(') { 
+                result += st.pop();
                 result += ' ';
             }
-            if (!st.IsEmpty() && st.Top() == '(') {
-                st.Pop();
+            if (!st.isEmpty() && st.top() == '(') {
+                st.pop();
             }
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            while (!st.IsEmpty() && st.Top() != '(' &&
-                   priority(st.Top()) >= priority(ch)) {
-                result += st.Pop();
+            while (!st.isEmpty() && st.top() != '(' &&
+                   priority(st.top()) >= priority(ch)) {
+                result += st.pop();
                 result += ' ';
             }
-            st.Push(ch);
+            st.push(ch);
         }
         ++i;
     }
 
-    while (!st.IsEmpty()) {
-        result += st.Pop();
+    while (!st.isEmpty()) {
+        result += st.pop();
         result += ' ';
     }
 
@@ -66,10 +68,10 @@ int eval(const std::string& post) {
 
     while (iss >> token) {
         if (isdigit(token[0]) || (token.size() > 1 && token[0] == '-')) {
-            st.Push(std::stoi(token));
+            st.push(std::stoi(token));
         } else {
-            int right = st.Pop();
-            int left = st.Pop();
+            int right = st.pop();
+            int left = st.pop();
             int res = 0;
             switch (token[0]) {
                 case '+': res = left + right; break;
@@ -78,8 +80,8 @@ int eval(const std::string& post) {
                 case '/': res = left / right; break;
                 default: break;
             }
-            st.Push(res);
+            st.push(res);
         }
     }
-    return st.Pop();
+    return st.pop();
 }
