@@ -1,10 +1,9 @@
 // Copyright 2025 NNTU-CS
 #include "alg.h"
-#include "tstack.h"
-
-#include <string>
-#include <sstream>
 #include <cctype>
+#include <sstream>
+#include <string>
+#include "tstack.h"
 
 int priority(char op) {
     if (op == '+' || op == '-') return 1;
@@ -27,21 +26,19 @@ std::string infx2pstfx(const std::string& inf) {
             }
             result += ' ';
             continue;
-        }
-        else if (ch == '(') {
+        } else if (ch == '(') {
             st.push(ch);
-        }
-        else if (ch == ')') {
-            while (!st.isEmpty() && st.get() != '(') {
+        } else if (ch == ')') {
+            while (!st.empty() && st.top() != '(') {
                 result += st.pop();
                 result += ' ';
             }
-            if (!st.isEmpty() && st.get() == '(')
+            if (!st.empty() && st.top() == '(') {
                 st.pop();
-        }
-        else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            while (!st.isEmpty() && st.get() != '(' &&
-                   priority(st.get()) >= priority(ch)) {
+            }
+        } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+            while (!st.empty() && st.top() != '(' &&
+                   priority(st.top()) >= priority(ch)) {
                 result += st.pop();
                 result += ' ';
             }
@@ -50,13 +47,14 @@ std::string infx2pstfx(const std::string& inf) {
         ++i;
     }
 
-    while (!st.isEmpty()) {
+    while (!st.empty()) {
         result += st.pop();
         result += ' ';
     }
 
-    if (!result.empty() && result.back() == ' ')
+    if (!result.empty() && result.back() == ' ') {
         result.pop_back();
+    }
 
     return result;
 }
@@ -69,8 +67,7 @@ int eval(const std::string& post) {
     while (iss >> token) {
         if (isdigit(token[0]) || (token.size() > 1 && token[0] == '-')) {
             st.push(std::stoi(token));
-        }
-        else {
+        } else {
             int right = st.pop();
             int left = st.pop();
             int res = 0;
